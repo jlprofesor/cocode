@@ -1,0 +1,24 @@
+// IMPORTANTE: Crear un archivo firebaseConfig.ts con este código sustituyendo las credenciales del proyecto por las del proyecto de Firebase sobre el que se va a trabajar
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: ''
+};
+
+// Initialize Firebase
+// Inicializamos Firebase con la configuración que acabamos de especificar arriba
+const app = initializeApp(firebaseConfig);
+
+// Creamos algo público para que desde cualquier componente podamos venir aquí y utilizar Firebase. Cada componente que utilice Firebase importará firebaseConfig y utilizará db (podría tener otro nombre) para usar, en este caso, Firestore
+export const db = getFirestore(app);
+export const auth = getAuth(app);
