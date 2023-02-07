@@ -29,7 +29,8 @@ export const CocodePage = () => {
   // Llamada al hook useForm para gestionar el formulario
   const { form, onInputChange, onTextAreaChange, onResetForm } = useForm<ICodigo>({
     codigo: '',
-    cabecera: ''
+    cabecera: '',
+    curso: ''
   });
 
   const { codigo, cabecera } = form;

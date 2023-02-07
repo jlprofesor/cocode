@@ -18,7 +18,7 @@ export const NotFoundPage = () => {
       <div className="row mt-4">
         <div className="col">
           <h2>Página no encontrada</h2>
-          <button className="btn btn-success" onClick={goBack}>
+          <button className="btn btn-success mt-2" onClick={goBack}>
             Volver atrás
           </button>
         </div>

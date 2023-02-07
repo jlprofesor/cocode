@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Navbar } from '../../components/Navbar';
 import { CocodePage } from './CocodePage';
 import { CocodeHistoricoPage } from './CocodeHistoricoPage';

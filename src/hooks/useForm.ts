@@ -23,6 +23,11 @@ export const useForm = <T>(initialForm: T) => {
     });
   };
 
+  // Nueva función para dar valores al formulario
+  const onSetForm = (form: T) => {
+    setForm(form);
+  };
+
   // Al ejecutar esta función volvemos al estado inicial
   const onResetForm = () => {
     setForm(initialForm);
@@ -34,6 +39,7 @@ export const useForm = <T>(initialForm: T) => {
     form: form as T,
     onInputChange,
     onTextAreaChange,
+    onSetForm,
     onResetForm
   };
 };
