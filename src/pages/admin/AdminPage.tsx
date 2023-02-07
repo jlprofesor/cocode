@@ -1,7 +1,6 @@
 import { useForm } from '../../hooks/useForm';
-import { ICodigo } from '../../interfaces/codigo.interface';
 import { db } from '../../config/firebaseConfig';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import {
   collection,
   getDocs,
@@ -16,8 +15,10 @@ import {
   updateDoc
 } from 'firebase/firestore';
 import { ICurso } from '../../interfaces/curso.interface';
+import { AppContext } from '../../context/AppContext';
 
 export const AdminPage = () => {
+  const { curso, setCurso } = useContext(AppContext);
   const [cursos, setCursos] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [edit, setEdit] = useState<boolean>(false);
@@ -56,11 +57,12 @@ export const AdminPage = () => {
       await deleteDoc(cursoDelete);
 
       // Borrar códigos del curso
-      const codigos = collection(db, 'codigos');
+      const codigos = collection(db, 'codigo');
       const q = query(codigos, where('curso', '==', curso.id));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach(async (codigo) => {
-        const codigoDelete = doc(db, `codigos/${codigo.id}`);
+        const codigoDelete = doc(db, `codigo/${codigo.id}`);
+        console.log(codigo.id);
         await deleteDoc(codigoDelete);
       });
       setLoading(true);
@@ -83,6 +85,8 @@ export const AdminPage = () => {
       await updateDoc(cursoActual, {
         actual: true
       });
+
+      setCurso({ id: curso.id, nombre: curso.data().nombre, actual: curso.data().actual });
       setLoading(true);
     }
   };
@@ -90,7 +94,8 @@ export const AdminPage = () => {
   const editCurso = (curso: DocumentData) => {
     const cursoEdit: ICurso = {
       nombre: curso.data().nombre,
-      actual: curso.data().actual
+      actual: curso.data().actual,
+      id: curso.id
     };
     onSetForm(cursoEdit);
     setIdEdit(curso.id);

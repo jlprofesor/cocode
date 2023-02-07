@@ -1,11 +1,13 @@
 import { useForm } from '../../hooks/useForm';
 import { db } from '../../config/firebaseConfig';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { collection, DocumentData, getDocs, orderBy, query, QueryDocumentSnapshot, where } from 'firebase/firestore';
 import { Codigos } from '../../components/Codigos';
 import { IFormFecha } from '../../interfaces/formFecha.interface';
+import { AppContext } from '../../context/AppContext';
 
 export const CocodeHistoricoPage = () => {
+  const { curso } = useContext(AppContext);
   const [visibleMensajeCopy, setVisibleMensajeCopy] = useState<boolean>(false);
   const [mensajeNoCodigo, setMensajeNoCodigo] = useState<boolean>(false);
   const [mensajeCopy, setMensajeCopy] = useState<string>('');
@@ -34,6 +36,7 @@ export const CocodeHistoricoPage = () => {
       collection(db, 'codigo'),
       where('created', '>=', start),
       where('created', '<=', end),
+      where('curso', '==', curso.id),
       orderBy('created', 'asc')
     );
     const codigos = await getDocs(q);
@@ -76,6 +79,7 @@ export const CocodeHistoricoPage = () => {
         <div className="col">
           <h1>Cocode histórico</h1>
           <hr />
+          <h2>Curso: {curso.nombre}</h2>
         </div>
       </div>
       <div className="row mt-4">
@@ -108,7 +112,12 @@ export const CocodeHistoricoPage = () => {
       <div className="row my-4 vertical-scrollable">
         <div className="col">
           {codigos && (
-            <Codigos codigos={codigos} setVisibleMensajeCopy={setVisibleMensajeCopy} setMensajeCopy={setMensajeCopy} />
+            <Codigos
+              codigos={codigos}
+              setVisibleMensajeCopy={setVisibleMensajeCopy}
+              setMensajeCopy={setMensajeCopy}
+              home={false}
+            />
           )}
         </div>
       </div>

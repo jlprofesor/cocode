@@ -30,11 +30,13 @@ export const Navbar = () => {
 
       <div className="collapse navbar-collapse">
         <ul className="navbar-nav">
-          <li className="nav-item">
-            <NavLink className={({ isActive }) => `nav-item nav-link  ${isActive ? 'active' : ''}`} to="/admin">
-              Administración
-            </NavLink>
-          </li>
+          {usuario.usuario !== '' && (
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => `nav-item nav-link  ${isActive ? 'active' : ''}`} to="/admin">
+                Administración
+              </NavLink>
+            </li>
+          )}
           <li className="nav-item">
             <NavLink className={({ isActive }) => `nav-item nav-link  ${isActive ? 'active' : ''}`} to="/cocode/">
               Código del día
@@ -51,7 +53,7 @@ export const Navbar = () => {
         </ul>
       </div>
 
-      {usuario && (
+      {usuario.usuario !== '' && (
         <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">
           <ul className="navbar-nav ml-auto">
             <span className="nav-item nav-link text-primary">Bienvenido, {usuario.usuario}</span>

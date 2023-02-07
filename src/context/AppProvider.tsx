@@ -1,5 +1,6 @@
 // Además de definir context, necesitamos algo que lo gestione. Es este UserProvider
 import { ReactNode, useState } from 'react';
+import { ICurso } from '../interfaces/curso.interface';
 import { IUsuario } from '../interfaces/usuario.interface';
 import { AppContext } from './AppContext';
 
@@ -14,6 +15,7 @@ export const AppProvider: React.FC<IPropsProvider> = ({ children }) => {
   // Este useState controla el estado del user y expone la función que lo cambiará.
   // Son los dos valores que se le pasan al context
   const [usuario, setUsuario] = useState<IUsuario>({ usuario: '' });
+  const [curso, setCurso] = useState<ICurso>({ id: '', nombre: '', actual: false });
   // Y ahora conectamos este provider con el context pasándole los valores que necesita a todos los hijos (children)
-  return <AppContext.Provider value={{ usuario, setUsuario }}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ usuario, setUsuario, curso, setCurso }}>{children}</AppContext.Provider>;
 };

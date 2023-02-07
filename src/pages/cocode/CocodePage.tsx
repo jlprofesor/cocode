@@ -1,7 +1,7 @@
 import { useForm } from '../../hooks/useForm';
 import { ICodigo } from '../../interfaces/codigo.interface';
 import { db } from '../../config/firebaseConfig';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import {
   addDoc,
   collection,
@@ -15,8 +15,10 @@ import {
   where
 } from 'firebase/firestore';
 import { Codigos } from '../../components/Codigos';
+import { AppContext } from '../../context/AppContext';
 
 export const CocodePage = () => {
+  const { curso } = useContext(AppContext);
   const [visibleMensajeCopy, setVisibleMensajeCopy] = useState<boolean>(false);
   const [mensajeCopy, setMensajeCopy] = useState<string>('');
   const [snapShot, setSnapshot] = useState<QuerySnapshot<DocumentData> | null>(null);
@@ -38,6 +40,7 @@ export const CocodePage = () => {
   const saveCodigo = async (e: FormEvent) => {
     e.preventDefault();
     await addDoc(collection(db, 'codigo'), {
+      curso: curso.id,
       codigo: codigo,
       cabecera: cabecera,
       created: Timestamp.fromDate(new Date())
@@ -47,23 +50,26 @@ export const CocodePage = () => {
   };
 
   useEffect(() => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
+    if (curso.id !== '') {
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
 
-    const end = new Date(start.getTime());
-    end.setHours(23, 59, 59, 999);
-    const q = query(
-      collection(db, 'codigo'),
-      where('created', '>=', start),
-      where('created', '<=', end),
-      orderBy('created', 'asc')
-    );
-    onSnapshot(q, (querySnapshot) => {
-      setSnapshot(querySnapshot);
-      window.scrollTo(0, document.body.scrollHeight);
-      querySnapshot.docs.length > 0 && beep.play();
-    });
-  }, []);
+      const end = new Date(start.getTime());
+      end.setHours(23, 59, 59, 999);
+      const q = query(
+        collection(db, 'codigo'),
+        where('curso', '==', curso.id),
+        where('created', '>=', start),
+        where('created', '<=', end),
+        orderBy('created', 'asc')
+      );
+      onSnapshot(q, (querySnapshot) => {
+        setSnapshot(querySnapshot);
+        window.scrollTo(0, document.body.scrollHeight);
+        querySnapshot.docs.length > 0 && beep.play();
+      });
+    }
+  }, [curso]);
 
   useEffect(() => {
     snapShot && setCodigos([...snapShot.docs]);
@@ -75,6 +81,7 @@ export const CocodePage = () => {
         <div className="col">
           <h1>Cocode diario</h1>
           <hr />
+          <h2>Curso: {curso.nombre}</h2>
         </div>
       </div>
       <div className="row mt-4">
@@ -119,7 +126,12 @@ export const CocodePage = () => {
       <div className="row my-4 vertical-scrollable">
         <div className="col">
           {codigos && (
-            <Codigos codigos={codigos} setVisibleMensajeCopy={setVisibleMensajeCopy} setMensajeCopy={setMensajeCopy} />
+            <Codigos
+              codigos={codigos}
+              setVisibleMensajeCopy={setVisibleMensajeCopy}
+              setMensajeCopy={setMensajeCopy}
+              home={true}
+            />
           )}
         </div>
       </div>

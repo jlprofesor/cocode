@@ -1,5 +1,7 @@
 import { deleteDoc, doc, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
+import { useContext } from 'react';
 import { db } from '../config/firebaseConfig';
+import { AppContext } from '../context/AppContext';
 
 // Esta interface determina el tipado de la información que va a recibir el componente. En este caso, recibe los codigos de firebase
 
@@ -8,10 +10,12 @@ interface IComponenteCodigosProps {
   codigos: QueryDocumentSnapshot<DocumentData>[];
   setVisibleMensajeCopy?: React.Dispatch<React.SetStateAction<boolean>>;
   setMensajeCopy?: React.Dispatch<React.SetStateAction<string>>;
+  home: boolean;
 }
 
 // El componente recibe los países y los renderiza
-export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy }: IComponenteCodigosProps) => {
+export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }: IComponenteCodigosProps) => {
+  const { usuario } = useContext(AppContext);
   const copy = (codigo: string, cabecera: string) => {
     navigator.clipboard.writeText(codigo);
     setMensajeCopy && setMensajeCopy(cabecera + ' copiado');
@@ -32,7 +36,7 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy }: ICom
     <>
       {codigos.length === 0 && (
         <div className="alert alert-warning" role="alert" aria-live="assertive">
-          No hay código guardado en este día
+          {home ? 'No hay código diario' : 'No hay código guardado en esta fecha'}
         </div>
       )}
       {codigos.length > 0 &&
@@ -55,9 +59,11 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy }: ICom
                 <button className="btn btn-success" onClick={() => copy(x.data().codigo, x.data().cabecera)}>
                   Copiar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
                 </button>
-                <button className="btn btn-danger" onClick={() => deleteCodigo(x)}>
-                  Eliminar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
-                </button>
+                {usuario.usuario !== '' && (
+                  <button className="btn btn-danger" onClick={() => deleteCodigo(x)}>
+                    Eliminar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
+                  </button>
+                )}
               </div>
             </div>
           );

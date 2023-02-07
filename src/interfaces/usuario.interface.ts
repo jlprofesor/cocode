@@ -1,3 +1,5 @@
+import { ICurso } from './curso.interface';
+
 export interface IUsuario {
   usuario: string;
 }
@@ -6,5 +8,7 @@ export interface IUsuario {
 // Todos los componentes van a poder acceder al usuario (usuario) y a la función que va a permitir cambiar el usuario (setUsuario)
 export interface IUsuarioContext {
   usuario: IUsuario;
+  curso: ICurso;
   setUsuario: (usuario: IUsuario) => void;
+  setCurso: (curso: ICurso) => void;
 }
