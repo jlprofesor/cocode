@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
+// Página de NotFound
 export const NotFoundPage = () => {
   const navigate = useNavigate();
 
+  // Simplemente tiene un botón para que al pulsarlo ejecute esta función. navigate(-1) vuelve una página hacia atrás
   const goBack = () => {
     navigate(-1);
   };

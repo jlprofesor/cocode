@@ -8,11 +8,13 @@ import { ILogin } from '../../interfaces/login.interface';
 import { IUsuarioContext } from '../../interfaces/usuario.interface';
 
 export const LoginPage = () => {
+  //useState para controlar el mensaje de error si se introducen credenciales erróneas
   const [visibleMensajeAuthError, setVisibleMensajeAuthError] = useState<boolean>(false);
   const navigate = useNavigate();
-  // Nos traemos el contexto con el usuario y la función que lo cambia
+  // Nos traemos del context la función que cambia el usuario. Cuando el login sea correcto, deberemos transmitir al context que hay un usuario autenticado
   const { setUsuario } = useContext<IUsuarioContext>(AppContext);
 
+  // Empleamos el hook useForm para gestionar el formulario de login
   const { form, onInputChange } = useForm<ILogin>({
     usuario: '',
     password: ''
@@ -20,27 +22,32 @@ export const LoginPage = () => {
 
   const { usuario, password } = form;
 
+  // Función de login
   const onLogin = (e: FormEvent) => {
     e.preventDefault();
+    // signInWithEmailAndPassword es una función de Firebase que permite autenticarse en una aplicaición con email/password
+    // auth es nuestra configuración de autenticación extraida del archivo firebaseConfig y el usuario/password son valores del formulario
     signInWithEmailAndPassword(auth, usuario, password)
       .then((userCredential: UserCredential) => {
-        // Al context no pasamos la contraseña. Por motivos de seguridad, una vez contrastadas las credenciales, su valor no se mantiene
-        // userCredential viene de Firebase. Nos trae información del usuario (email, avatar...)
-        setUsuario({ usuario: userCredential.user.email! });
+        // Si el login es exitoso viene la información del usuario en un objeto. Le llamamos userCredential
+        // Al context le pasamos el nombre de usuario. Coincide con el email. Al final ponemos ! porque si no TypeScript nos dice que puede ser nulo. Con ! le decimos que no va a ser nulo nunca (se supone que si viene un información de un usuario autenticado, es porque hay usuario)
+        setUsuario({ nombreUsuario: userCredential.user.email! });
+        // Navegamos a admin si el login es exitoso. replace: true es para no permitir volver atrás (elimina el historial reciente)
         navigate('/admin', {
           replace: true
         });
       })
       .catch((error) => {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
+        // Si la autenticación no es exitosa sacamos el mensaje de error
         setVisibleMensajeAuthError(true);
+        // Y a los 2000 milisegundos lo hacemos desaparecer
         setTimeout(() => {
           setVisibleMensajeAuthError(false);
         }, 2000);
       });
   };
 
+  // Función que se ejecutará cuando un usuario pulse el botón de entrar como alumno. En ese caso navegamos a cocode para que cargue CocodePage tal y como se registra en el sistema de rutas de la aplicación
   const goToCocodePage = () => {
     navigate('cocode', {
       replace: true
@@ -106,10 +113,11 @@ export const LoginPage = () => {
               </div>
             </form>
           </div>
+          {/* Si visibleMensajeAuthError es true se muestra el mensaje de credenciales erróneas */}
           {visibleMensajeAuthError && (
             <div className="row mt-4">
               <div className="alert alert-warning" role="alert" aria-live="assertive">
-                "Credenciales erróneas"
+                Credenciales erróneas
               </div>
             </div>
           )}

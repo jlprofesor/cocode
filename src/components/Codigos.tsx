@@ -4,7 +4,6 @@ import { db } from '../config/firebaseConfig';
 import { AppContext } from '../context/AppContext';
 
 // Esta interface determina el tipado de la información que va a recibir el componente. En este caso, recibe los codigos de firebase
-
 // Se decide poner aquí y no en la carpeta interfaces porque su uso va a ser exclusivo para este componente, aunque otra estrategia sería incluir todas las interfaces en la carpeta interfaces
 interface IComponenteCodigosProps {
   codigos: QueryDocumentSnapshot<DocumentData>[];
@@ -84,9 +83,9 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }
                   {/* En un span oculto a la vista se le añade la cabecera de lo que va a copiarse para que los lectures de pantalla lo lean*/}
                   Copiar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
                 </button>
-                {/* El botón de eliminar solo se visualizará cuando haya un usuario logueado. Será entonces cuando usuario.usuario será diferente de un string vacío
-                usuario es el objeto y usuario es la propiedad del objeto que registra el usuario. Se podrían haber utilizado otros nombres para evitar esta dualidad... */}
-                {usuario.usuario !== '' && (
+                {/* El botón de eliminar solo se visualizará cuando haya un usuario logueado. Será entonces cuando usuario.nombreUsuario será diferente de un string vacío
+                usuario es el objeto y nombreUsuario es la propiedad del objeto que registra el usuario. */}
+                {usuario.nombreUsuario !== '' && (
                   <button className="btn btn-danger" onClick={() => deleteCodigo(x)}>
                     Eliminar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
                   </button>
