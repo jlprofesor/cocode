@@ -31,12 +31,23 @@ export const Navbar = () => {
   return (
     // Cada enlace va a una página. Las rutas (to="/xxxxxx") tienen que tener su igual en el sistema de rutas de la aplicación. Este sistema de rutas está en los archivos de enrutamiento de la carpeta router, el AdminRoutes y en CocodeRoutes
     <nav className="navbar navbar-light bg-light navbar-expand-sm  p-2">
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
       {/* Link y NavLink permiten navegar a diferentes sitios de la aplicación. Esos sitios serán accesibles mediante las rutas. NavLink tiene propiedades que Link no tiene y que, por ejemplo, nos van a permitir activar el enlace de la página en la que estamos */}
       <Link className="navbar-brand" to="/cocode">
         <img src="/coco.png" width="30" height="30" alt="Logo de cocode" />
       </Link>
 
-      <div className="collapse navbar-collapse">
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav">
           {/* El link de Administración solo estará visible para el administrador. Este se habrá autenticado previamente y tendrá nombreUsuario registrado en el context. */}
           {usuario.nombreUsuario !== '' && (
