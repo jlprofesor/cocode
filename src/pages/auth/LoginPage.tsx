@@ -49,7 +49,7 @@ export const LoginPage = () => {
 
   // Función que se ejecutará cuando un usuario pulse el botón de entrar como alumno. En ese caso navegamos a cocode para que cargue CocodePage tal y como se registra en el sistema de rutas de la aplicación
   const goToCocodePage = () => {
-    navigate('cocode', {
+    navigate('/cocode', {
       replace: true
     });
   };

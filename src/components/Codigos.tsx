@@ -20,7 +20,7 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }
   const { usuario } = useContext(AppContext);
 
   // Función que ejecutará el botón Copiar de cada código. Este botón le pasa cabecera y código
-  const copy = (cabecera: string, codigo: string) => {
+  const copy = (codigo: string, cabecera: string) => {
     // Pasamos al portapapeles el código
     navigator.clipboard.writeText(codigo);
     // setMensajeCopy y setVisibleMensajeCopy son funciones que se las pasa CocodePage o CocodeHistoricoPage. Cambia respectivamente mensajeCopy y visibleMensajeCopy. Estos dos valores
