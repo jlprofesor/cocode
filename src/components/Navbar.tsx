@@ -1,5 +1,5 @@
 import { signOut } from 'firebase/auth';
-import { useContext } from 'react';
+import { ChangeEvent, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebaseConfig';
 import { AppContext } from '../context/AppContext';
@@ -8,8 +8,9 @@ import { AppContext } from '../context/AppContext';
 export const Navbar = () => {
   // Obtenemos del context, el usuario y la función que nos va a permitir cambiarlo. Cuando cerremos sesión desde aquí, el usuario desaparecerá.
   const { usuario, setUsuario } = useContext(AppContext);
-  const navigate = useNavigate();
+  const { beep, setBeep } = useContext(AppContext);
 
+  const navigate = useNavigate();
   // Al hacer el logout, navegamos al login eliminando el historial. Esto es para no poder volver atrás
   const logout = () => {
     // signOut forma parte del módulo de autenticación de Firebase. auth está importado arriba y es la capacidad de autenticación con Firebase de nuestro proyecto.
@@ -26,6 +27,10 @@ export const Navbar = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const toggleBeep = (e: ChangeEvent<HTMLInputElement>) => {
+    setBeep({ audio: e.target.checked });
   };
 
   return (
@@ -46,7 +51,6 @@ export const Navbar = () => {
       <Link className="navbar-brand" to="/cocode">
         <img src="/coco.png" width="30" height="30" alt="Logo de cocode" />
       </Link>
-
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav">
           {/* El link de Administración solo estará visible para el administrador. Este se habrá autenticado previamente y tendrá nombreUsuario registrado en el context. */}
@@ -73,20 +77,37 @@ export const Navbar = () => {
           </li>
         </ul>
       </div>
-
-      {/* Como ocurre con el link de Administración, este área de cerrar sesión y de bienvenida solo estará visible para el administrador. Este se habrá autenticado previamente y tendrá nombreUsuario registrado en el context.  */}
-      {usuario.nombreUsuario !== '' && (
-        <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">
-          <ul className="navbar-nav ml-auto">
-            {/* Mostramos en un span el nombre de usuario. Este está representado en la propiedad nombreUsuario dentro del objeto usuario importado desde el context */}
+      {/* Como ocurre con el link de Administración, este área de cerrar sesión y de bienvenida solo estará visible para el administrador excepto la personalización de sonidos. Este se habrá autenticado previamente y tendrá nombreUsuario registrado en el context.  */}
+      <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">
+        <ul className="navbar-nav ml-auto">
+          {/* <li className="nav-item">
+            <span className="nav-item nav-link">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={beep.audio}
+                  id="checkBeep"
+                  onChange={toggleBeep}
+                />
+                <label className="form-check-label" htmlFor="checkBeep">
+                  Emitir sonidos
+                </label>
+              </div>
+            </span>
+          </li> */}
+          {/* Mostramos en un span el nombre de usuario. Este está representado en la propiedad nombreUsuario dentro del objeto usuario importado desde el context */}
+          {usuario.nombreUsuario !== '' && (
             <span className="nav-item nav-link text-primary">Bienvenido, {usuario.nombreUsuario}</span>
-            {/* Y aquí el botón cerrar sesión que ejecuta la función logout */}
+          )}
+          {/* Y aquí el botón cerrar sesión que ejecuta la función logout */}
+          {usuario.nombreUsuario !== '' && (
             <button className="nav-item nav-link btn" onClick={logout}>
               Cerrar sesión
             </button>
-          </ul>
-        </div>
-      )}
+          )}
+        </ul>
+      </div>
     </nav>
   );
 };

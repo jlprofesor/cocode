@@ -85,11 +85,15 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }
                 </button>
                 {/* El botón de eliminar solo se visualizará cuando haya un usuario logueado. Será entonces cuando usuario.nombreUsuario será diferente de un string vacío
                 usuario es el objeto y nombreUsuario es la propiedad del objeto que registra el usuario. */}
-                {usuario.nombreUsuario !== '' && (
+                {/* {usuario.nombreUsuario !== '' && (
                   <button className="btn btn-danger" onClick={() => deleteCodigo(x)}>
                     Eliminar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
                   </button>
-                )}
+                )} */}
+
+                <button className="btn btn-danger" onClick={() => deleteCodigo(x)}>
+                  Eliminar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
+                </button>
               </div>
             </div>
           );

@@ -7,8 +7,9 @@ import { IFormFecha } from '../../interfaces/formFecha.interface';
 import { AppContext } from '../../context/AppContext';
 
 export const CocodeHistoricoPage = () => {
-  // Extraemos del context  el curso actual
+  // Extraemos del context el curso actual
   const { curso } = useContext(AppContext);
+  const { beep } = useContext(AppContext);
   // useState para controlar si el mensaje de aviso de texto copiado está visible o no. En este componente, visibleMensajeCopy se utiliza para ver o no ver el mensaje de texto copiado
   // setVisibleMensajeCopy se le pasará al componente Codigos porque desde ese componente entrará en acción al pulsar el botón copiar de cada código.
   const [visibleMensajeCopy, setVisibleMensajeCopy] = useState<boolean>(false);
@@ -100,7 +101,7 @@ export const CocodeHistoricoPage = () => {
     // Este click produce la descarga de la misma manera que cuando hacemos clic en un enlace de descarga de archivos
     link.click();
     // Hacemos sonar el beep de la descarga
-    beep2.play();
+    beep.audio && beep2.play();
   };
 
   return (
