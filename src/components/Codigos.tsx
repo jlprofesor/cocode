@@ -51,7 +51,7 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }
       {/* Si no hay códigos (CocodePage o CocodeHistoricoPage le hay pasado una colección vacía porque no hay código diario o se ha elegido un día del histórico sin código) mostramos un mensaje */}
       {codigos.length === 0 && (
         // Este mensaje será diferente del valor de la propiedad home
-        <div className="alert alert-warning" role="alert" aria-live="assertive">
+        <div className="alert alert-warning" role="status" aria-live="polite">
           {home ? 'No hay código diario' : 'No hay código guardado en esta fecha'}
         </div>
       )}

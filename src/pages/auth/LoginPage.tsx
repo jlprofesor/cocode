@@ -116,7 +116,7 @@ export const LoginPage = () => {
           {/* Si visibleMensajeAuthError es true se muestra el mensaje de credenciales erróneas */}
           {visibleMensajeAuthError && (
             <div className="row mt-4">
-              <div className="alert alert-warning" role="alert" aria-live="assertive">
+              <div className="alert alert-warning" role="status" aria-live="polite">
                 Credenciales erróneas
               </div>
             </div>
