@@ -68,10 +68,13 @@ export const Navbar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink
+            {/* <NavLink
               className={({ isActive }) => `nav-item nav-link  ${isActive ? 'active' : ''}`}
               to="/cocode/historico"
             >
+              Histórico de código
+            </NavLink> */}
+            <NavLink className={({ isActive }) => `nav-item nav-link  ${isActive ? 'active' : ''}`} to="/cocode/">
               Histórico de código
             </NavLink>
           </li>

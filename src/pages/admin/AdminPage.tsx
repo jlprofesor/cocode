@@ -76,22 +76,32 @@ export const AdminPage = () => {
       await deleteDoc(cursoDelete);
 
       // Además de eliminar el curso, debemos borrar los códigos del curso
-      // Hacemos una referencia a la colección codigo mediante el método de Firestore collection
-      const codigos = collection(db, 'codigo');
-      // Construimos una consulta (método de Firestore query) en la referencia a codigos, donde (where) el curso sea igual al id del curso eliminado
-      const q = query(codigos, where('curso', '==', curso.id));
-      // getDocs es un método Firestore que nos extrae los documentos de la consulta anterior (q). Volvamos esos datos en codigosEliminar
-      const codigosEliminar = await getDocs(q);
-      // Iteramos todos los códigos
-      codigosEliminar.forEach(async (codigo) => {
-        // Hacemos una referencia a cada uno
-        const codigoDelete = doc(db, `codigo/${codigo.id}`);
-        // Y lo eliminamos
-        await deleteDoc(codigoDelete);
-      });
+      await deleteCodigo(curso);
       // Ponemos el loading a true para recargar de forma automática los cursos mediante el useEffect posterior
       setLoading(true);
     }
+  };
+
+  const deleteCodigoCurso = async (curso: DocumentData) => {
+    if (window.confirm(`¿Estás seguro de eliminar el código del curso ${curso.data().nombre}?`)) {
+      await deleteCodigo(curso);
+    }
+  };
+
+  const deleteCodigo = async (curso: DocumentData) => {
+    // Hacemos una referencia a la colección codigo mediante el método de Firestore collection
+    const codigos = collection(db, 'codigo');
+    // Construimos una consulta (método de Firestore query) en la referencia a codigos, donde (where) el curso sea igual al id del curso eliminado
+    const q = query(codigos, where('curso', '==', curso.id));
+    // getDocs es un método Firestore que nos extrae los documentos de la consulta anterior (q). Volvamos esos datos en codigosEliminar
+    const codigosEliminar = await getDocs(q);
+    // Iteramos todos los códigos
+    codigosEliminar.forEach(async (codigo) => {
+      // Hacemos una referencia a cada uno
+      const codigoDelete = doc(db, `codigo/${codigo.id}`);
+      // Y lo eliminamos
+      await deleteDoc(codigoDelete);
+    });
   };
 
   // Función para establecer un curso como curso actual. El curso actual será aquel que el administrador establecerá como curso vigente
@@ -177,7 +187,7 @@ export const AdminPage = () => {
         </div>
       </div>
       <div className="row mt-4">
-        <div className="col">
+        <div className="col-8">
           {loading && <div className="alert alert-info text-center">Cargando...</div>}
           {!loading && cursos.length > 0 && (
             <table className="table table-striped">
@@ -205,6 +215,9 @@ export const AdminPage = () => {
                         </button>
                         <button className="btn btn-danger" onClick={() => deleteCurso(x)}>
                           Eliminar
+                        </button>
+                        <button className="btn btn-danger" onClick={() => deleteCodigoCurso(x)}>
+                          Eliminar código
                         </button>
                       </td>
                     </tr>
