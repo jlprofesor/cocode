@@ -74,9 +74,6 @@ export const Navbar = () => {
             >
               Histórico de código
             </NavLink> */}
-            <NavLink className={({ isActive }) => `nav-item nav-link  ${isActive ? 'active' : ''}`} to="/cocode/">
-              Histórico de código
-            </NavLink>
           </li>
         </ul>
       </div>
