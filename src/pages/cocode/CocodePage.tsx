@@ -19,7 +19,7 @@ import { AppContext } from '../../context/AppContext';
 
 export const CocodePage = () => {
   // Extraemos del context  el curso actual
-  const { curso } = useContext(AppContext);
+  const { curso, usuario } = useContext(AppContext);
   const { beep } = useContext(AppContext);
   // useState para controlar si el mensaje de aviso de texto copiado está visible o no. En este componente, visibleMensajeCopy se utiliza para ver o no ver el mensaje de texto copiado
   // setVisibleMensajeCopy se le pasará al componente Codigos porque desde ese componente entrará en acción al pulsar el botón copiar de cada código.
@@ -42,7 +42,8 @@ export const CocodePage = () => {
   const { form, onInputChange, onTextAreaChange, onResetForm } = useForm<ICodigo>({
     cabecera: '',
     codigo: '',
-    curso: ''
+    curso: '',
+    admin: false
   });
 
   // Desestructuramos el codigo y la cabecera para obtener los valores de forma individualizada
@@ -58,8 +59,9 @@ export const CocodePage = () => {
     await addDoc(collection(db, 'codigo'), {
       curso: curso.id,
       codigo: codigo,
-      cabecera: cabecera,
-      created: Timestamp.fromDate(new Date())
+      cabecera: usuario.nombreUsuario !== '' ? 'PROFE - ' + cabecera : cabecera,
+      created: Timestamp.fromDate(new Date()),
+      admin: usuario.nombreUsuario !== ''
     });
     // Utilizamos el onResetForm del hook useForm para limpiar el formulario
     onResetForm();

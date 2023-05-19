@@ -13,7 +13,7 @@ export const CocodeRoutes = () => {
         {/* Y especificamos el mapa de rutas: localhost:51738/cocode cargará CodcodePage, localhost:51738/historico cargará CocodeHistoricoPage y localhost:51738/cocode/xxxxx cargará CocodePage  */}
         <Routes>
           <Route path="/" element={<CocodePage />} />
-          {/* <Route path="/historico" element={<CocodeHistoricoPage />} /> */}
+          <Route path="/historico" element={<CocodeHistoricoPage />} />
           <Route path="/*" element={<CocodePage />} />
         </Routes>
       </div>

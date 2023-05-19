@@ -62,7 +62,7 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }
             // x sería cada código de la colección. El id nos sirve muy bien para el key
             // Cada código será una fila (div row)
             <div className="row mt-2" key={x.id}>
-              <div className="col-12">
+              <div className="col-12" style={{ color: x.data().admin ? 'LightCoral' : 'black' }}>
                 {/* Aquí va la cabecera en un h2 */}
                 <h2 className="h3">
                   {x.data().cabecera} -&nbsp;
@@ -91,7 +91,11 @@ export const Codigos = ({ codigos, setVisibleMensajeCopy, setMensajeCopy, home }
                   </button>
                 )} */}
 
-                <button className="btn btn-danger" onClick={() => deleteCodigo(x)}>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => deleteCodigo(x)}
+                  disabled={x.data().admin && usuario.nombreUsuario === ''}
+                >
                   Eliminar <span className="visually-hidden">&nbsp;{x.data().cabecera}</span>
                 </button>
               </div>
